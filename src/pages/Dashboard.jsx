@@ -1,200 +1,160 @@
-import React from 'react';
-import { ArrowTrendingUpIcon, PhoneIcon, UsersIcon, BanknotesIcon } from '@heroicons/react/24/solid';
-import { Line, Pie } from 'react-chartjs-2';
+// ai-move-clone/src/pages/Dashboard.jsx
+import React, { useMemo, useState } from "react";
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  ArcElement,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
   Tooltip,
-  Legend,
-} from 'chart.js';
+  CartesianGrid,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+} from "recharts";
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, ArcElement, Tooltip, Legend);
+const metrics = [
+  { title: "Leads Received", value: "641", badge: "+28%", gradient: "from-blue-500 to-indigo-600" },
+  { title: "Contact Rate", value: "87%", badge: "+5%", gradient: null },
+  { title: "Bookings", value: "234", badge: "+19%", gradient: null },
+  { title: "ROI", value: "342%", badge: "+12%", gradient: null },
+];
 
-export default function Dashboard() {
-  const [tab, setTab] = React.useState('All');
-  const [range, setRange] = React.useState('30d'); // '7d' | '30d' | '90d'
-  const [showLeads, setShowLeads] = React.useState(true);
-  const [showBookings, setShowBookings] = React.useState(true);
+const lineData = [
+  { month: "Jan", leads: 245, bookings: 89 },
+  { month: "Feb", leads: 320, bookings: 120 },
+  { month: "Mar", leads: 410, bookings: 150 },
+  { month: "Apr", leads: 380, bookings: 140 },
+  { month: "May", leads: 460, bookings: 170 },
+  { month: "Jun", leads: 620, bookings: 200 },
+];
 
-  const chartLabels = React.useMemo(() => {
-    if (range === '7d') return ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-    if (range === '90d') return ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
-    return ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
-  }, [range]);
+const pieData = [
+  { name: "AI Handled", value: 68 },
+  { name: "Human Handled", value: 32 },
+];
+const COLORS = ["#7C3AED", "#60A5FA"];
 
-  const leadsData = React.useMemo(() => {
-    if (range === '7d') return [42, 51, 39, 60, 55, 62, 70];
-    if (range === '90d') return [220, 260, 310, 305, 350, 410];
-    return [245, 260, 310, 305, 350, 410];
-  }, [range]);
+const recent = [
+  { name: "Sarah Johnson", note: "Lead responded positively, likely to book. Needs quote for 3BR move.", time: "2 mins ago" },
+  { name: "Mike Chen", note: "Price-sensitive customer. Requested call back tomorrow at 2 PM.", time: "15 mins ago" },
+  { name: "Emily Rodriguez", note: "Immediate booking! Moving next week. Full-service package selected.", time: "28 mins ago" },
+];
 
-  const bookingsData = React.useMemo(() => {
-    if (range === '7d') return [14, 18, 12, 22, 25, 28, 30];
-    if (range === '90d') return [85, 110, 130, 135, 155, 195];
-    return [89, 120, 135, 140, 160, 200];
-  }, [range]);
-  const items = [
-    { name: 'Sarah Johnson', note: 'Likely to book. Needs quote for 3BR move.', type: 'AI' },
-    { name: 'Mike Chen', note: 'Requested call back tomorrow at 2 P.M.', type: 'Human' },
-    { name: 'Emily Rodriguez', note: 'Booked next week. Full-service selected.', type: 'AI' },
-  ];
-  const filtered = tab === 'All' ? items : items.filter((i) => i.type === tab);
+export default function DashboardExact() {
+  const [query, setQuery] = useState("");
+
+  const filteredRecent = useMemo(() => {
+    if (!query) return recent;
+    return recent.filter((r) => (r.name + r.note).toLowerCase().includes(query.toLowerCase()));
+  }, [query]);
 
   return (
-    <>
-      {/* KPI Row */}
-      <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
-        {[
-          { label: 'Leads Received', value: '641', delta: '+28%', Icon: UsersIcon, color: 'bg-sky-100 text-sky-600' },
-          { label: 'Contact Rate', value: '87%', delta: '+5%', Icon: PhoneIcon, color: 'bg-emerald-100 text-emerald-600' },
-          { label: 'Bookings', value: '234', delta: '+13%', Icon: ArrowTrendingUpIcon, color: 'bg-indigo-100 text-indigo-600' },
-          { label: 'ROI', value: '342%', delta: '+12%', Icon: BanknotesIcon, color: 'bg-violet-100 text-violet-600' },
-        ].map(({ label, value, delta, Icon, color }) => (
-          <div key={label} className="bg-white border border-slate-200 rounded-xl p-4 hover:shadow-card transition-shadow">
+    <div className="space-y-6">
+      <header className="flex items-center justify-between mb-6">
+        <div>
+          <h1 className="text-2xl font-semibold">Dashboard</h1>
+          <p className="text-sm text-slate-500">Welcome back! Here's your business overview.</p>
+        </div>
+
+        <div className="flex items-center gap-4">
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search activity..."
+            className="hidden md:block px-3 py-2 rounded-lg border border-slate-200 bg-white/80 w-72 text-sm focus:outline-none"
+          />
+          <button className="px-4 py-2 rounded-lg bg-white border">+ Create</button>
+          <div className="flex items-center gap-2">
+            <img src={`https://api.dicebear.com/6.x/initials/svg?seed=Harsh`} alt="avatar" className="w-9 h-9 rounded" />
+            <div className="text-sm">Harsh</div>
+          </div>
+        </div>
+      </header>
+
+      {/* Metric cards */}
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        {metrics.map((m, idx) => (
+          <div key={m.title} className={`rounded-xl p-5 shadow-sm ${idx === 0 ? `bg-gradient-to-r ${m.gradient} text-white` : "bg-white"}`}>
             <div className="flex items-center justify-between">
-              <div className={`w-8 h-8 rounded-md grid place-items-center ${color}`}>
-                <Icon className="w-4 h-4" />
-              </div>
-              <span className="text-xs px-2 py-1 rounded-full bg-emerald-100 text-emerald-700">{delta}</span>
+              <div className="text-sm opacity-80">{m.title}</div>
+              <div className="text-xs bg-white/10 px-2 py-1 rounded-full">{m.badge}</div>
             </div>
-            <div className="mt-3 text-xs text-slate-500">{label}</div>
-            <div className="text-2xl font-semibold mt-1">{value}</div>
+            <div className="mt-3 text-2xl font-semibold">{m.value}</div>
           </div>
         ))}
-      </div>
+      </section>
 
-      {/* Charts Row */}
-      <div className="grid gap-4 grid-cols-1 lg:grid-cols-3">
-        <div className="lg:col-span-2 bg-white rounded-xl border border-slate-200 p-3">
-          <div className="flex items-center justify-between pb-2">
-            <div className="text-sm text-slate-600">Leads vs Bookings</div>
-            <div className="flex items-center gap-2 text-xs">
-              <select
-                value={range}
-                onChange={(e) => setRange(e.target.value)}
-                className="border border-slate-200 rounded-md px-2 py-1"
-              >
-                <option value="7d">7d</option>
-                <option value="30d">30d</option>
-                <option value="90d">90d</option>
-              </select>
-              <label className="flex items-center gap-1">
-                <input type="checkbox" checked={showLeads} onChange={(e) => setShowLeads(e.target.checked)} />
-                Leads
-              </label>
-              <label className="flex items-center gap-1">
-                <input type="checkbox" checked={showBookings} onChange={(e) => setShowBookings(e.target.checked)} />
-                Bookings
-              </label>
-            </div>
+      {/* Charts */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+        <div className="lg:col-span-2 bg-white rounded-xl p-4 shadow-sm">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="font-medium">Leads vs Bookings</h3>
+            <div className="text-sm text-slate-500">Last 6 months</div>
           </div>
-          <div className="h-[320px] md:h-[360px]">
-            <Line
-              data={{
-                labels: chartLabels,
-                datasets: [
-                  showLeads
-                    ? {
-                        label: 'Leads',
-                        data: leadsData,
-                        borderColor: '#0284c7',
-                        backgroundColor: 'rgba(2,132,199,0.15)',
-                        fill: true,
-                        tension: 0.35,
-                        pointRadius: 2,
-                      }
-                    : null,
-                  showBookings
-                    ? {
-                        label: 'Bookings',
-                        data: bookingsData,
-                        borderColor: '#22c55e',
-                        backgroundColor: 'rgba(34,197,94,0.15)',
-                        fill: true,
-                        tension: 0.35,
-                        pointRadius: 2,
-                      }
-                    : null,
-                ].filter(Boolean),
-              }}
-              options={{
-                responsive: true,
-                maintainAspectRatio: false,
-                interaction: { mode: 'index', intersect: false },
-                plugins: { legend: { position: 'bottom' }, tooltip: { enabled: true } },
-                scales: {
-                  x: { grid: { display: false } },
-                  y: { grid: { color: '#eef2f7' }, ticks: { precision: 0 } },
-                },
-              }}
-            />
+          <div className="h-72">
+            <ResponsiveContainer>
+              <LineChart data={lineData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#eef2ff" />
+                <XAxis dataKey="month" tick={{ fill: "#94a3b8" }} />
+                <YAxis />
+                <Tooltip />
+                <Line type="monotone" dataKey="leads" stroke="#3b82f6" strokeWidth={3} dot={false} />
+                <Line type="monotone" dataKey="bookings" stroke="#10b981" strokeWidth={2} dot={false} />
+              </LineChart>
+            </ResponsiveContainer>
           </div>
         </div>
-        <div className="bg-white rounded-xl border border-slate-200 p-6">
-          <Pie
-            data={{
-              labels: ['AI Handled', 'Human Handled'],
-              datasets: [
-                { data: [68, 32], backgroundColor: ['#7c3aed', '#a78bfa'], borderWidth: 0 },
-              ],
-            }}
-            options={{
-              responsive: true,
-              maintainAspectRatio: false,
-              plugins: { legend: { position: 'bottom' } },
-            }}
-          />
+
+        <div className="bg-white rounded-xl p-4 shadow-sm">
+          <h3 className="font-medium mb-3">AI vs Human</h3>
+          <div className="h-56">
+            <ResponsiveContainer>
+              <PieChart>
+                <Pie data={pieData} dataKey="value" innerRadius={50} outerRadius={80} paddingAngle={4} label>
+                  {pieData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
         </div>
       </div>
 
-      {/* Bottom Row */}
-      <div className="grid gap-4 grid-cols-1 lg:grid-cols-3">
-        <div className="bg-white rounded-xl border border-slate-200 p-4">
-          <div className="font-semibold mb-2">Quick Actions</div>
-          <div className="grid gap-2">
-            <button className="px-3 py-2 rounded-md text-left bg-sky-500 text-white">Start Dialer</button>
-            <button className="px-3 py-2 rounded-md text-left bg-green-500 text-white">Create AI Agent</button>
-            <button className="px-3 py-2 rounded-md text-left bg-indigo-500 text-white">Buy Leads</button>
+      {/* Quick Actions + Recent */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+        <div className="lg:col-span-2 bg-white rounded-xl p-4 shadow-sm">
+          <h3 className="font-medium mb-3">Quick Actions</h3>
+          <div className="space-y-3">
+            <button className="w-full px-4 py-3 rounded-lg bg-gradient-to-r from-blue-500 to-indigo-600 text-white">Start Dialer</button>
+            <button className="w-full px-4 py-3 rounded-lg border">Create AI Agent</button>
+            <button className="w-full px-4 py-3 rounded-lg border">Buy Leads</button>
           </div>
         </div>
 
-        <div className="lg:col-span-2 bg-white rounded-xl border border-slate-200 p-4">
-          <div className="flex items-center justify-between mb-2">
-            <div className="font-semibold">Recent Activity</div>
-            <div className="flex items-center gap-2 text-sm">
-              {['All', 'AI', 'Human'].map((t) => (
-                <button
-                  key={t}
-                  onClick={() => setTab(t)}
-                  className={
-                    'px-2 py-1 rounded-md border border-slate-200 hover:bg-slate-50 ' +
-                    (tab === t ? 'bg-slate-100' : '')
-                  }
-                >
-                  {t}
-                </button>
-              ))}
-            </div>
-          </div>
-          <div className="grid gap-2">
-            {filtered.map((i) => (
-              <div key={i.name} className="flex items-center justify-between p-3 rounded-md border border-slate-200">
-                <div>
-                  <div className="font-medium">{i.name}</div>
-                  <div className="text-sm text-slate-600">{i.note}</div>
+        <div className="bg-white rounded-xl p-4 shadow-sm">
+          <h3 className="font-medium mb-3">Recent Activity</h3>
+          <div className="space-y-3">
+            {filteredRecent.map((r, i) => (
+              <div key={i} className="p-3 rounded-lg bg-[#f8fafc]">
+                <div className="flex items-center justify-between">
+                  <div className="font-medium">{r.name}</div>
+                  <div className="text-xs text-slate-500">{r.time}</div>
                 </div>
-                <span className="text-xs text-slate-600 border border-slate-200 px-2 py-1 rounded-full">{i.type} Summary</span>
+                <div className="text-sm text-slate-600 mt-1">{r.note}</div>
               </div>
             ))}
           </div>
         </div>
       </div>
-    </>
+
+      {/* Jobs placeholder */}
+      <div className="bg-white rounded-xl p-4 shadow-sm">
+        <h3 className="font-medium mb-3">Jobs</h3>
+        <div className="text-sm text-slate-500">Table and other controls would go here. This component is built to be drop-in and extended.</div>
+      </div>
+    </div>
   );
 }
-
-

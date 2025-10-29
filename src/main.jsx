@@ -1,34 +1,34 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import './index.css'
-import App from './App.jsx'
-import Dashboard from './pages/Dashboard.jsx'
-import Leads from './pages/Leads.jsx'
-import Calls from './pages/Calls.jsx'
-import Agents from './pages/Agents.jsx'
-import Analytics from './pages/Analytics.jsx'
-import Billing from './pages/Billing.jsx'
-import Settings from './pages/Settings.jsx'
+// src/main.jsx
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import "./index.css";
 
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <App />,
-    children: [
-      { index: true, element: <Dashboard /> },
-      { path: 'leads', element: <Leads /> },
-      { path: 'calls', element: <Calls /> },
-      { path: 'agents', element: <Agents /> },
-      { path: 'analytics', element: <Analytics /> },
-      { path: 'billing', element: <Billing /> },
-      { path: 'settings', element: <Settings /> },
-    ],
-  },
-])
+import App from "./App";
+import Dashboard from "./pages/Dashboard";
+import Leads from "./pages/Leads";
+import Calls from "./pages/Calls";
+import AiAgents from "./pages/AiAgents";
+import Analytics from "./pages/Analytics";
+import Billing from "./pages/Billing";
+import Settings from "./pages/Settings";
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <RouterProvider router={router} />
-  </StrictMode>,
-)
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
+    <BrowserRouter>
+      <Routes>
+        {/* Layout wrapper */}
+        <Route path="/" element={<App />}>
+          <Route index element={<Dashboard />} />
+          <Route path="leads" element={<Leads />} />
+          <Route path="calls" element={<Calls />} />
+          <Route path="ai-agents" element={<AiAgents />} />
+          <Route path="agents" element={<AiAgents />} />
+          <Route path="analytics" element={<Analytics />} />
+          <Route path="billing" element={<Billing />} />
+          <Route path="settings" element={<Settings />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  </React.StrictMode>
+);

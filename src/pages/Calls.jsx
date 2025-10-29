@@ -1,82 +1,134 @@
-import React from 'react';
-
-const CALLS = [
-  { id: 1, contact: 'Sarah Johnson', role: 'Lead', time: '2025-10-25 14:12', duration: '00:03:42', audio: null, transcript: 'Discussed quote and move date.' },
-  { id: 2, contact: 'Mike Chen', role: 'Prospect', time: '2025-10-24 10:05', duration: '00:07:20', audio: null, transcript: 'Asked about packing services.' },
-  { id: 3, contact: 'Emily Rodriguez', role: 'Customer', time: '2025-10-22 09:45', duration: '00:01:50', audio: null, transcript: 'Confirmed next steps.' },
-];
+// ai-move-clone/src/pages/Calls.jsx
+import React, { useState } from "react";
+import { Play, Phone } from "lucide-react";
 
 export default function Calls() {
-  const [selected, setSelected] = React.useState(CALLS[0]);
-  const audioRef = React.useRef(null);
-  const [playing, setPlaying] = React.useState(false);
-
-  function togglePlay() {
-    if (!audioRef.current) return;
-    if (playing) {
-      audioRef.current.pause();
-      setPlaying(false);
-    } else {
-      audioRef.current.play().catch(() => {});
-      setPlaying(true);
-    }
-  }
-
-  function onSelect(call) {
-    setSelected(call);
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
-      setPlaying(false);
-    }
-  }
+  const [callLogs] = useState([
+    {
+      time: "Jun 15, 2024 2:34 PM",
+      contact: "Sarah Johnson",
+      rep: "AI Bot",
+      duration: "12:45",
+      status: "Booked",
+      transcript:
+        "Customer confirmed booking for 3BR move on June 20th...",
+      icon: "✅",
+    },
+    {
+      time: "Jun 15, 2024 1:18 PM",
+      contact: "Mike Chen",
+      rep: "John Smith",
+      duration: "8:22",
+      status: "Voicemail",
+      transcript: "Left detailed message with quote and callback number...",
+      icon: "📩",
+    },
+    {
+      time: "Jun 15, 2024 11:42 AM",
+      contact: "Emily Rodriguez",
+      rep: "AI Bot",
+      duration: "5:15",
+      status: "No Answer",
+      transcript: "—",
+      icon: "❌",
+    },
+    {
+      time: "Jun 15, 2024 10:29 AM",
+      contact: "David Park",
+      rep: "Jane Doe",
+      duration: "15:33",
+      status: "Quoted",
+      transcript:
+        "Provided detailed quote for long-distance move, customer interested...",
+      icon: "💬",
+    },
+  ]);
 
   return (
-    <div className="grid gap-4 grid-cols-1 lg:grid-cols-3">
-      <div className="bg-white border border-slate-200 rounded-xl p-4 lg:col-span-1">
-        <div className="font-semibold mb-3">Calls</div>
-        <div className="space-y-2 max-h-[380px] overflow-auto pr-1">
-          {CALLS.map((c) => (
-            <div
-              key={c.id}
-              onClick={() => onSelect(c)}
-              className={`p-3 rounded-md border cursor-pointer ${selected.id === c.id ? 'bg-slate-50 border-sky-200' : 'border-slate-200 hover:bg-slate-50'}`}
-            >
-              <div className="font-medium">{c.contact}</div>
-              <div className="text-xs text-slate-500">{c.role}</div>
-              <div className="text-xs text-slate-400 mt-1">{c.time} · {c.duration}</div>
-            </div>
-          ))}
+    <div className="space-y-6">
+      {/* Header */}
+      <div>
+        <h1 className="text-3xl font-bold">Calls</h1>
+        <p className="text-gray-500">View call activity and start dialing</p>
+      </div>
+
+      {/* Power Dialer Section */}
+      <div className="bg-white shadow-sm rounded-2xl p-6 mb-6 relative overflow-hidden">
+        <div className="flex justify-between items-start flex-wrap">
+          <div>
+            <h2 className="font-semibold text-lg">Power Dialer</h2>
+            <p className="text-gray-500 text-sm">
+              Automatically dial through your lead list with AI assistance
+            </p>
+          </div>
+          <button className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition">
+            <Play className="w-4 h-4" /> Start Power Dialer
+          </button>
+        </div>
+
+        <div className="flex justify-between mt-6 text-center">
+          <div>
+            <p className="text-2xl font-semibold">156</p>
+            <p className="text-gray-500 text-sm">Queued</p>
+          </div>
+          <div>
+            <p className="text-2xl font-semibold">42</p>
+            <p className="text-gray-500 text-sm">Connected</p>
+          </div>
+          <div>
+            <p className="text-2xl font-semibold">87%</p>
+            <p className="text-gray-500 text-sm">Contact Rate</p>
+          </div>
+        </div>
+
+        <div className="mt-6 bg-blue-600 rounded-full h-3 w-full relative overflow-hidden">
+          <div className="absolute left-0 top-0 h-3 w-4/5 bg-blue-400 animate-pulse"></div>
+        </div>
+
+        <div className="absolute top-4 right-4 bg-blue-100 p-3 rounded-full">
+          <Phone className="w-5 h-5 text-blue-600" />
         </div>
       </div>
 
-      <div className="bg-white border border-slate-200 rounded-xl p-4 lg:col-span-2">
-        <div className="flex items-center justify-between">
-          <div>
-            <div className="text-lg font-semibold">{selected.contact}</div>
-            <div className="text-sm text-slate-500">{selected.role} · {selected.time}</div>
-          </div>
-          <div className="text-right">
-            <div className="text-xs text-slate-400">Duration</div>
-            <div className="font-medium">{selected.duration}</div>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-3 mt-4">
-          <audio ref={audioRef} src={selected.audio || undefined} onEnded={() => setPlaying(false)} />
-          <button onClick={togglePlay} className="px-3 py-2 rounded-md border border-slate-200">
-            {playing ? 'Pause' : 'Play'}
-          </button>
-          <div className="text-sm text-slate-600">{selected.transcript}</div>
-        </div>
-
-        <div className="mt-4">
-          <div className="font-semibold">Transcript</div>
-          <p className="text-slate-700 mt-1 text-sm">{selected.transcript}</p>
+      {/* Call Log */}
+      <div className="bg-white shadow-sm rounded-2xl p-6">
+        <h3 className="text-lg font-semibold mb-4">Call Log</h3>
+        <div className="overflow-x-auto">
+          <table className="min-w-full text-sm text-left border-collapse">
+            <thead>
+              <tr className="text-gray-500 border-b border-gray-200">
+                <th className="py-3 px-4">Date & Time</th>
+                <th className="py-3 px-4">Contact</th>
+                <th className="py-3 px-4">Rep</th>
+                <th className="py-3 px-4">Duration</th>
+                <th className="py-3 px-4">Status</th>
+                <th className="py-3 px-4">AI Transcript</th>
+              </tr>
+            </thead>
+            <tbody>
+              {callLogs.map((log, idx) => (
+                <tr
+                  key={idx}
+                  className="border-b border-gray-100 hover:bg-gray-50 transition"
+                >
+                  <td className="py-3 px-4 whitespace-nowrap">{log.time}</td>
+                  <td className="py-3 px-4">{log.contact}</td>
+                  <td className="py-3 px-4">
+                    <span className="px-2 py-1 text-xs bg-purple-100 text-purple-700 rounded-full">
+                      {log.rep}
+                    </span>
+                  </td>
+                  <td className="py-3 px-4">{log.duration}</td>
+                  <td className="py-3 px-4">{log.icon} {log.status}</td>
+                  <td className="py-3 px-4 text-gray-500 truncate max-w-xs">
+                    {log.transcript}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
   );
 }
-
-

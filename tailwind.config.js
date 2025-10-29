@@ -1,40 +1,10 @@
-// /** @type {import('tailwindcss').Config} */
-// export default {
-//   content: [
-//     './index.html',
-//     './src/**/*.{js,jsx,ts,tsx}',
-//   ],
-//   theme: {
-//     extend: {
-//       colors: {
-//         slateInk: '#0f172a',
-//       },
-//       boxShadow: {
-//         card: '0 6px 18px rgba(20,30,50,0.04)',
-//       },
-//     },
-//   },
-//   plugins: [],
-// };
-
-
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    "./index.html",
-    "./src/**/*.{js,jsx,ts,tsx}"
+    "./src/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
-    extend: {
-      colors: {
-        primary: "#0f172a",      // dark navy
-        accent: "#00b894",       // green-ish accent
-        muted: "#64748b",
-      },
-      fontFamily: {
-        sans: ["Inter", "ui-sans-serif", "system-ui"]
-      }
-    },
+    extend: {},
   },
   plugins: [],
 }
