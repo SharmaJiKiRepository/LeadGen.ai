@@ -1,20 +1,40 @@
+// /** @type {import('tailwindcss').Config} */
+// export default {
+//   content: [
+//     './index.html',
+//     './src/**/*.{js,jsx,ts,tsx}',
+//   ],
+//   theme: {
+//     extend: {
+//       colors: {
+//         slateInk: '#0f172a',
+//       },
+//       boxShadow: {
+//         card: '0 6px 18px rgba(20,30,50,0.04)',
+//       },
+//     },
+//   },
+//   plugins: [],
+// };
+
+
 /** @type {import('tailwindcss').Config} */
-export default {
+module.exports = {
   content: [
-    './index.html',
-    './src/**/*.{js,jsx,ts,tsx}',
+    "./index.html",
+    "./src/**/*.{js,jsx,ts,tsx}"
   ],
   theme: {
     extend: {
       colors: {
-        slateInk: '#0f172a',
+        primary: "#0f172a",      // dark navy
+        accent: "#00b894",       // green-ish accent
+        muted: "#64748b",
       },
-      boxShadow: {
-        card: '0 6px 18px rgba(20,30,50,0.04)',
-      },
+      fontFamily: {
+        sans: ["Inter", "ui-sans-serif", "system-ui"]
+      }
     },
   },
   plugins: [],
-};
-
-
+}
