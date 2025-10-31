@@ -93,7 +93,9 @@ export default function Calls() {
       {/* Call Log */}
       <div className="bg-white shadow-sm rounded-2xl p-6">
         <h3 className="text-lg font-semibold mb-4">Call Log</h3>
-        <div className="overflow-x-auto">
+
+        {/* Desktop table */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="min-w-full text-sm text-left border-collapse">
             <thead>
               <tr className="text-gray-500 border-b border-gray-200">
@@ -127,6 +129,30 @@ export default function Calls() {
               ))}
             </tbody>
           </table>
+        </div>
+
+        {/* Mobile cards */}
+        <div className="md:hidden space-y-3">
+          {callLogs.map((log, idx) => (
+            <div key={idx} className="p-4 border rounded-xl bg-[#fbfcfe]">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <div className="text-sm text-slate-500">{log.time}</div>
+                  <div className="mt-1 font-medium">{log.contact}</div>
+                  <div className="mt-1 text-xs">
+                    <span className="px-2 py-0.5 rounded-full bg-purple-100 text-purple-700">{log.rep}</span>
+                  </div>
+                </div>
+                <div className="text-sm text-slate-600 whitespace-nowrap">{log.duration}</div>
+              </div>
+              <div className="mt-3 flex items-center justify-between">
+                <div className="text-sm">{log.icon} {log.status}</div>
+              </div>
+              {log.transcript && log.transcript !== "—" && (
+                <div className="mt-2 text-sm text-slate-600">{log.transcript}</div>
+              )}
+            </div>
+          ))}
         </div>
       </div>
     </div>
