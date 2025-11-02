@@ -33,13 +33,17 @@ function TabButton({ id, label, icon: Icon, active, onClick }) {
   return (
     <button
       onClick={() => onClick(id)}
-      className={`flex items-center gap-2 px-3 py-2 rounded-full text-sm transition ${
+      className={`flex items-center gap-2 px-3 py-2 rounded-full text-sm transition flex-shrink-0 ${
         active ? "bg-white shadow" : "bg-transparent hover:bg-white/50"
       }`}
       aria-pressed={active}
     >
       {Icon && <Icon className="w-4 h-4 text-slate-500" />}
-      <span className={active ? "text-slate-900 font-medium" : "text-slate-600"}>
+      <span
+        className={`${
+          active ? "text-slate-900 font-medium" : "text-slate-600"
+        } whitespace-nowrap`}
+      >
         {label}
       </span>
     </button>
@@ -67,9 +71,24 @@ export default function Settings() {
   });
 
   const [routes, setRoutes] = useState([
-    { id: 1, title: "West Coast Routes", desc: "ZIP codes: 90000–99999 → AI Bot + John Smith", enabled: true },
-    { id: 2, title: "East Coast Routes", desc: "ZIP codes: 00001–19999 → AI Bot + Jane Doe", enabled: true },
-    { id: 3, title: "High-Value Leads", desc: "Score > 85 → Priority queue", enabled: true },
+    {
+      id: 1,
+      title: "West Coast Routes",
+      desc: "ZIP codes: 90000–99999 → AI Bot + John Smith",
+      enabled: true,
+    },
+    {
+      id: 2,
+      title: "East Coast Routes",
+      desc: "ZIP codes: 00001–19999 → AI Bot + Jane Doe",
+      enabled: true,
+    },
+    {
+      id: 3,
+      title: "High-Value Leads",
+      desc: "Score > 85 → Priority queue",
+      enabled: true,
+    },
   ]);
 
   const [integrations, setIntegrations] = useState([
@@ -80,15 +99,35 @@ export default function Settings() {
   ]);
 
   const [consents, setConsents] = useState([
-    { id: 1, phone: "+1 (555) 234-5678", date: "Jun 15, 2024", status: "Active" },
-    { id: 2, phone: "+1 (555) 345-6789", date: "Jun 12, 2024", status: "Opted Out" },
-    { id: 3, phone: "+1 (555) 456-7890", date: "Jun 10, 2024", status: "Active" },
+    {
+      id: 1,
+      phone: "+1 (555) 234-5678",
+      date: "Jun 15, 2024",
+      status: "Active",
+    },
+    {
+      id: 2,
+      phone: "+1 (555) 345-6789",
+      date: "Jun 12, 2024",
+      status: "Opted Out",
+    },
+    {
+      id: 3,
+      phone: "+1 (555) 456-7890",
+      date: "Jun 10, 2024",
+      status: "Active",
+    },
   ]);
 
   const [users, setUsers] = useState([
     { id: 1, name: "John Smith", email: "john@movemaster.com", role: "Admin" },
     { id: 2, name: "Jane Doe", email: "jane@movemaster.com", role: "Sales Rep" },
-    { id: 3, name: "Mike Johnson", email: "mike@movemaster.com", role: "Sales Rep" },
+    {
+      id: 3,
+      name: "Mike Johnson",
+      email: "mike@movemaster.com",
+      role: "Sales Rep",
+    },
   ]);
 
   /* ---------- Handlers ---------- */
@@ -105,13 +144,15 @@ export default function Settings() {
 
   /* ---------- Tabs ---------- */
   const OrgTab = () => (
-    <section className="bg-white rounded-2xl shadow-sm p-6 border border-gray-100">
-      <h3 className="text-lg font-semibold mb-4">Organization Profile</h3>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <section className="bg-white rounded-2xl shadow-sm p-4 sm:p-6 border border-gray-100">
+      <h3 className="text-base sm:text-lg font-semibold mb-4">
+        Organization Profile
+      </h3>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <label className="space-y-1">
           <div className="text-sm text-slate-600">Company Name</div>
           <input
-            className="w-full px-4 py-2 rounded-lg border border-slate-200"
+            className="w-full px-3 py-2 rounded-lg border border-slate-200"
             value={org.name}
             onChange={(e) => updateOrgField("name", e.target.value)}
           />
@@ -119,7 +160,7 @@ export default function Settings() {
         <label className="space-y-1">
           <div className="text-sm text-slate-600">Business Email</div>
           <input
-            className="w-full px-4 py-2 rounded-lg border border-slate-200"
+            className="w-full px-3 py-2 rounded-lg border border-slate-200"
             value={org.email}
             onChange={(e) => updateOrgField("email", e.target.value)}
           />
@@ -127,23 +168,23 @@ export default function Settings() {
         <label className="space-y-1">
           <div className="text-sm text-slate-600">Phone Number</div>
           <input
-            className="w-full px-4 py-2 rounded-lg border border-slate-200"
+            className="w-full px-3 py-2 rounded-lg border border-slate-200"
             value={org.phone}
             onChange={(e) => updateOrgField("phone", e.target.value)}
           />
         </label>
-        <label className="space-y-1 md:col-span-2">
+        <label className="space-y-1 sm:col-span-2">
           <div className="text-sm text-slate-600">Business Address</div>
           <input
-            className="w-full px-4 py-2 rounded-lg border border-slate-200"
+            className="w-full px-3 py-2 rounded-lg border border-slate-200"
             value={org.address}
             onChange={(e) => updateOrgField("address", e.target.value)}
           />
         </label>
       </div>
-      <div className="mt-6">
+      <div className="mt-6 flex justify-end">
         <button
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700"
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 w-full sm:w-auto"
           onClick={() => alert("Saved (wire to API)")}
         >
           Save Changes
@@ -154,14 +195,19 @@ export default function Settings() {
 
   const RoutingTab = () => (
     <section className="space-y-4">
-      <div className="bg-white rounded-2xl shadow-sm p-6 border border-gray-100">
-        <h3 className="text-lg font-semibold mb-4">Lead Routing Rules</h3>
+      <div className="bg-white rounded-2xl shadow-sm p-4 sm:p-6 border border-gray-100">
+        <h3 className="text-base sm:text-lg font-semibold mb-4">
+          Lead Routing Rules
+        </h3>
         <div className="space-y-3">
           {routes.map((r) => (
-            <div key={r.id} className="flex items-center justify-between bg-slate-50 p-4 rounded-lg">
-              <div>
-                <div className="font-medium">{r.title}</div>
-                <div className="text-sm text-slate-500">{r.desc}</div>
+            <div
+              key={r.id}
+              className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-slate-50 p-4 rounded-lg overflow-hidden"
+            >
+              <div className="min-w-0">
+                <div className="font-medium text-sm sm:text-base break-words">{r.title}</div>
+                <div className="text-xs sm:text-sm text-slate-500 break-words">{r.desc}</div>
               </div>
               <Toggle checked={r.enabled} onChange={() => toggleRoute(r.id)} />
             </div>
@@ -169,7 +215,7 @@ export default function Settings() {
         </div>
         <div className="mt-4">
           <button
-            className="flex items-center gap-2 px-3 py-2 bg-white border rounded text-sm"
+            className="flex items-center justify-center gap-2 px-3 py-2 bg-white border rounded text-sm w-full sm:w-auto"
             onClick={() => alert("Add rule flow")}
           >
             <Plus className="w-4 h-4" /> Add New Rule
@@ -180,12 +226,15 @@ export default function Settings() {
   );
 
   const IntegrationsTab = () => (
-    <section className="bg-white rounded-2xl shadow-sm p-6 border border-gray-100">
-      <h3 className="text-lg font-semibold mb-4">Integrations</h3>
+    <section className="bg-white rounded-2xl shadow-sm p-4 sm:p-6 border border-gray-100">
+      <h3 className="text-base sm:text-lg font-semibold mb-4">Integrations</h3>
       <div className="space-y-3">
         {integrations.map((it) => (
-          <div key={it.id} className="flex items-center justify-between bg-slate-50 p-4 rounded-lg">
-            <div className="font-medium">{it.name}</div>
+          <div
+            key={it.id}
+            className="flex items-center justify-between bg-slate-50 p-4 rounded-lg"
+          >
+            <div className="font-medium text-sm sm:text-base">{it.name}</div>
             <Toggle checked={it.enabled} onChange={() => toggleIntegration(it.id)} />
           </div>
         ))}
@@ -194,13 +243,18 @@ export default function Settings() {
   );
 
   const ConsentTab = () => (
-    <section className="bg-white rounded-2xl shadow-sm p-6 border border-gray-100">
-      <h3 className="text-lg font-semibold mb-4">Consent Management</h3>
+    <section className="bg-white rounded-2xl shadow-sm p-4 sm:p-6 border border-gray-100">
+      <h3 className="text-base sm:text-lg font-semibold mb-4">
+        Consent Management
+      </h3>
       <div className="space-y-3">
         {consents.map((c) => (
-          <div key={c.id} className="flex items-center justify-between bg-slate-50 p-4 rounded-lg">
-            <div>
-              <div className="font-medium">{c.phone}</div>
+          <div
+            key={c.id}
+            className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-slate-50 p-4 rounded-lg overflow-hidden"
+          >
+            <div className="min-w-0">
+              <div className="font-medium text-sm sm:text-base break-words">{c.phone}</div>
               <div className="text-xs text-slate-500">{c.date}</div>
             </div>
             <div className="flex items-center gap-3">
@@ -216,7 +270,7 @@ export default function Settings() {
               {c.status !== "Opted Out" && (
                 <button
                   onClick={() => revokeConsent(c.id)}
-                  className="text-sm text-slate-600 hover:underline"
+                  className="text-xs sm:text-sm text-slate-600 hover:underline"
                 >
                   Opt out
                 </button>
@@ -229,24 +283,27 @@ export default function Settings() {
   );
 
   const UsersTab = () => (
-    <section className="bg-white rounded-2xl shadow-sm p-6 border border-gray-100">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold">Team Members</h3>
+    <section className="bg-white rounded-2xl shadow-sm p-4 sm:p-6 border border-gray-100">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-3">
+        <h3 className="text-base sm:text-lg font-semibold">Team Members</h3>
         <button
           onClick={inviteUser}
-          className="px-3 py-2 bg-blue-600 text-white rounded-lg"
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg w-full sm:w-auto"
         >
           Invite User
         </button>
       </div>
       <div className="space-y-3">
         {users.map((u) => (
-          <div key={u.id} className="flex items-center justify-between bg-slate-50 p-4 rounded-lg">
-            <div>
-              <div className="font-medium">{u.name}</div>
-              <div className="text-xs text-slate-500">{u.email}</div>
+          <div
+            key={u.id}
+            className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-slate-50 p-4 rounded-lg overflow-hidden"
+          >
+            <div className="min-w-0">
+              <div className="font-medium text-sm sm:text-base break-words">{u.name}</div>
+              <div className="text-xs text-slate-500 break-all">{u.email}</div>
             </div>
-            <div className="text-xs px-2 py-1 rounded-full bg-white border text-slate-500">
+            <div className="text-xs px-2 py-1 rounded-full bg-white border text-slate-500 text-center">
               {u.role}
             </div>
           </div>
@@ -256,14 +313,16 @@ export default function Settings() {
   );
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 sm:p-6 space-y-6 min-w-0">
       <header>
-        <h1 className="text-2xl font-semibold">Settings</h1>
-        <p className="text-sm text-slate-500">Manage your platform configuration</p>
+        <h1 className="text-xl sm:text-2xl font-semibold">Settings</h1>
+        <p className="text-xs sm:text-sm text-slate-500">
+          Manage your platform configuration
+        </p>
       </header>
 
       {/* Tabs */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2 sm:gap-3 overflow-x-auto no-scrollbar -mx-2 px-2 py-1 sm:py-0 whitespace-nowrap bg-white/40 rounded-xl shadow-sm min-w-0">
         {tabs.map((t) => (
           <TabButton
             key={t.id}
