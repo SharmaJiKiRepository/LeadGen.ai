@@ -6,16 +6,15 @@ import AiVsHumanChart from "../components/charts/AiVsHumanChart";
 import { dashboardStats, recentActivity } from "../data/mockData";
 import clsx from "clsx";
 
-// Fixed StatCard
 const StatCard = ({ item }) => {
-  const { Icon, title, value, change, isPrimary } = item;
+  const { title, value, change, isPrimary } = item;
 
   return (
     <Card
       className={clsx(
-        "transition-colors duration-200",
+        "transition-colors duration-200 shadow-sm",
         isPrimary
-          ? "bg-indigo-600 text-white"
+          ? "bg-gradient-to-r from-primary to-indigo-500 text-white"
           : "bg-white text-gray-900 border border-gray-200"
       )}
     >
@@ -24,7 +23,7 @@ const StatCard = ({ item }) => {
           <p
             className={clsx(
               "text-sm font-medium",
-              isPrimary ? "text-indigo-100" : "text-gray-500"
+              isPrimary ? "text-white/80" : "text-gray-500"
             )}
           >
             {title}
@@ -35,7 +34,7 @@ const StatCard = ({ item }) => {
         <div
           className={clsx(
             "flex items-center text-sm font-semibold",
-            isPrimary ? "text-indigo-100" : "text-green-600"
+            isPrimary ? "text-white/90" : "text-green-600"
           )}
         >
           <span
@@ -53,7 +52,6 @@ const StatCard = ({ item }) => {
   );
 };
 
-// Dashboard Component
 const Dashboard = () => {
   return (
     <div className="space-y-6">
@@ -117,7 +115,7 @@ const Dashboard = () => {
                   </p>
                   <p className="mt-1 text-xs text-gray-400">{activity.time}</p>
                 </div>
-                <button className="ml-4 rounded-full bg-indigo-100 px-3 py-1 text-xs font-medium text-primary hover:bg-indigo-200">
+                <button className="ml-4 rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary hover:bg-primary/20">
                   AI Summary
                 </button>
               </li>
